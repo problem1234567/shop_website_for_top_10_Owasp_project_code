@@ -1,0 +1,20 @@
+{
+  "name": "shop-for-sec",
+  "version": "1.0.0",
+  "description": "cho môn học đồ án môn học",
+  "main": "app.js",
+  "scripts": {
+    "server": "nodemon ./app.js",
+    "client": "npm run start --prefix shop_proj",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "\"Huỳnh Minh Hiếu, mssv: 17520470. Nguyễn Cao Thái, mssv: 17521030\"",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.1.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.2"
+  }
+}

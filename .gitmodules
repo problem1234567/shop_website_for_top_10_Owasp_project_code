@@ -1,0 +1,3 @@
+[submodule "web_shop_client_side"]
+	path = web_shop_client_side
+	url = https://github.com/problem1234567/web_shop_client_side.git

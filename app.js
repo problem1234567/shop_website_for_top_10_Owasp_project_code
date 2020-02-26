@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const session = require("express-session");
 const passport = require("passport");
@@ -20,11 +21,20 @@ app.use(bodyParser.urlencoded({
 
 // use cors
 app.use((req, res, next) => {
-    res.append('Access-Control-Allow-Origin', ['*']);
+    res.append('Access-Control-Allow-Origin', ['http://localhost:3000']);
     res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.append('Access-Control-Allow-Headers', 'Content-Type');
+    res.append("Access-Control-Allow-Credentials", 'true');
+    res.append('Access-Control-Allow-Headers', 'Content-Type,Cache-Control');
     next();
 });
+
+// app.use(cors({
+//     'allowedHeaders': ['sessionId', 'Content-Type','Cache'],
+//     'exposedHeaders': ['sessionId'],
+//     'credentials': true,
+//     'origin': ['http://localhost:3000'], // here goes Frontend IP
+// }))
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -70,20 +80,23 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.post('/login', function (req, res) {
+    console.log(req.body);
     const user = new User({
-        name: req.body.username,
+        username: req.body.username,
         password: req.body.password,
         priority: req.body.username == 'admin' ? 0 : 1
     });
-
+    
     req.login(user, function (err) {
         if (err) {
             console.log(err);
             res.send(JSON.stringify("Failed"));
         } else {
+            console.log("ok man");
             passport.authenticate("local")(req, res, function () {
-                res.send(JSON.stringify("login roi nha"));
-            })
+                console.log("ok man 2");
+                res.send(JSON.stringify("OK"));
+            });
         }
     })
 });
@@ -105,11 +118,20 @@ app.post('/register',function(req,res){
 });
 
 app.get('/checkAuth',function(req,res){
+    console.log('authenticate....');
     if (req.isAuthenticated()){
-        res.send("OK");
+        res.send(JSON.stringify("OK"));
     } else {
-        res.send("ERROR");
+        res.send(JSON.stringify("ERROR"));
     } 
+});
+
+app.get('/logout',function(req,res){
+    console.log("logout here");
+    req.logout();
+    req.session.destroy(function (err) {
+        if (err) { return next(err); }
+    });
 })
 
 app.listen(5000 || process.env.PORT, () => {

@@ -7,6 +7,7 @@
     "server": "nodemon ./app.js",
     "client": "npm run start --prefix web_shop_client_side",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "cd web_shop_client_side && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "\"Huỳnh Minh Hiếu, mssv: 17520470. Nguyễn Cao Thái, mssv: 17521030\"",
@@ -15,6 +16,7 @@
     "body-parser": "^1.19.0",
     "concurrently": "^5.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "mongoose": "^5.9.2",

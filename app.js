@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const cors = require('cors');
 
 const session = require("express-session");
 const passport = require("passport");
@@ -40,9 +39,11 @@ app.use(bodyParser.urlencoded({
 }));
 
 // ----------------------Database-------------------------------------------------------------------------
-mongoose.connect('mongodb://localhost:27017/shopDB', {
+mongoose.connect('mongodb+srv://admin-hieu:text123@cluster0-pyfc0.mongodb.net/shopDB?retryWrites=true&w=majority', {
     useNewUrlParser: true,useUnifiedTopology: true
 });
+
+
 
 
 mongoose.set('useCreateIndex', true);
@@ -107,7 +108,6 @@ app.post('/register',function(req,res){
     },req.body.password, function(err,user){
         if(err){
             res.send(JSON.stringify('failed'));
-            console.log("error me roi");
             console.log(err);
         } else {
             passport.authenticate("local")(req,res,function(){

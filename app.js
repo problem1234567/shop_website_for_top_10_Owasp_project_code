@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
 
 const session = require("express-session");
 const passport = require("passport");
@@ -20,7 +21,7 @@ app.use(bodyParser.urlencoded({
 
 // use cors
 app.use((req, res, next) => {
-    res.append('Access-Control-Allow-Origin', ['http://localhost:3000']);
+    res.append('Access-Control-Allow-Origin', ["http://localhost:3000"]);
     res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.append("Access-Control-Allow-Credentials", 'true');
     res.append('Access-Control-Allow-Headers', 'Content-Type,Cache-Control');
@@ -38,12 +39,16 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+app.use(express.static(path.join(__dirname, 'build')));
+
 // ----------------------Database-------------------------------------------------------------------------
 mongoose.connect('mongodb+srv://admin-hieu:text123@cluster0-pyfc0.mongodb.net/shopDB?retryWrites=true&w=majority', {
     useNewUrlParser: true,useUnifiedTopology: true
 });
 
-
+// mongoose.connect('mongodb://localhost:27017/shopDB', {
+//     useNewUrlParser: true,useUnifiedTopology: true
+// });
 
 
 mongoose.set('useCreateIndex', true);
@@ -80,6 +85,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/*', function (req, res) {
+       res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 app.post('/login', function (req, res) {
     console.log(req.body);
     const user = new User({
@@ -93,9 +102,7 @@ app.post('/login', function (req, res) {
             console.log(err);
             res.send(JSON.stringify("Failed"));
         } else {
-            console.log("ok man");
             passport.authenticate("local")(req, res, function () {
-                console.log("ok man 2");
                 res.send(JSON.stringify("OK"));
             });
         }
@@ -132,15 +139,7 @@ app.get('/logout',function(req,res){
     req.session.destroy(function (err) {
         if (err) { return next(err); }
     });
-})
-
-if (process.env.NODE_ENV === 'production') {
-    // Serve any static files
-    app.use(express.static(path.join(__dirname, 'web_shop_client_side/build')));// Handle React routing, return all requests to React app
-    app.get('*', function(req, res) {
-      res.sendFile(path.join(__dirname, 'web_shop_client_side/build', 'index.html'));
-    });
-  }
+});
 
 app.listen(5000 || process.env.PORT, () => {
     console.log("server running ....");

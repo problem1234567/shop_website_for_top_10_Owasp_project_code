@@ -42,13 +42,13 @@ app.use(bodyParser.urlencoded({
 app.use(express.static(path.join(__dirname, 'build')));
 
 // ----------------------Database-------------------------------------------------------------------------
-// mongoose.connect('mongodb+srv://admin-hieu:text123@cluster0-pyfc0.mongodb.net/shopDB?retryWrites=true&w=majority', {
-//     useNewUrlParser: true,useUnifiedTopology: true
-// });
-
-mongoose.connect('mongodb://localhost:27017/shopDB', {
+mongoose.connect('mongodb+srv://admin-hieu:text123@cluster0-pyfc0.mongodb.net/shopDB?retryWrites=true&w=majority', {
     useNewUrlParser: true,useUnifiedTopology: true
 });
+
+// mongoose.connect('mongodb://localhost:27017/shopDB', {
+//     useNewUrlParser: true,useUnifiedTopology: true
+// });
 
 
 mongoose.set('useCreateIndex', true);
